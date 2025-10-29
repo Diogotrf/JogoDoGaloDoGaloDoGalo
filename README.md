@@ -1,4 +1,4 @@
-# Jogo do Galo do Galo do Galo 🧠🎮
+# Jogo do Galo do Galo do Galo
 
 Este é um jogo de **Jogo do Galo** (Tic Tac Toe) com **três níveis de profundidade**:
 - Um tabuleiro 3×3
@@ -7,7 +7,7 @@ Este é um jogo de **Jogo do Galo** (Tic Tac Toe) com **três níveis de profund
 
 Totalizando **729 células**!
 
-## 🎯 Como jogar
+## Como jogar
 - A primeira jogada é livre.
 - A célula onde jogas define o próximo mini tabuleiro.
 - O mini tabuleiro onde jogaste define o próximo tabuleiro médio.
