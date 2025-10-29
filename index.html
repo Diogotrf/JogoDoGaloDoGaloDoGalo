@@ -1,10 +1,10 @@
-
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Jogo do Galo do Galo do Galo</title>
-    <style>
+<meta charset="utf-8"/>
+<title>Jogo do Galo do Galo do Galo</title>
+<style>
         :root {
             --bg-color: #f4f4f9;
             --text-color: #333;
@@ -64,22 +64,25 @@
             transition: background-color 0.5s ease;
             aspect-ratio: 1 / 1;
         }
-        .cell {
-            width: 100%;
-            height: 100%;
-            font-size: 1.2em; display: flex; align-items: center; justify-content: center;
-            text-align: center;
-            line-height: normal;
-            cursor: pointer;
-            border: 1px solid #ccc;
-            user-select: none;
-            border-radius: 4px;
-            background-color: var(--cell-bg);
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+        
+.cell {
+    width: 100%;
+    height: 100%;
+    font-size: 1.2em;
+    text-align: center;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    user-select: none;
+    border-radius: 4px;
+    background-color: var(--cell-bg);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    aspect-ratio: 1 / 1;
+}
+
         .cell:active {
             transform: scale(0.95);
         }
@@ -125,15 +128,14 @@
     </style>
 </head>
 <body>
-    <h1>Jogo do Galo do Galo do Galo</h1>
-    <div class="button-bar">
-        <button onclick="location.reload()">Restart Game</button>
-        <button onclick="toggleTheme()">Toggle Dark Mode</button>
-    </div>
-    <div id="mainBoard" class="main-board"></div>
-    <p id="status">Player X's turn</p>
-
-    <script>
+<h1>Jogo do Galo do Galo do Galo</h1>
+<div class="button-bar">
+<button onclick="location.reload()">Restart Game</button>
+<button onclick="toggleTheme()">Toggle Dark Mode</button>
+</div>
+<div class="main-board" id="mainBoard"></div>
+<p id="status">Player X's turn</p>
+<script>
         function toggleTheme() {
             document.body.classList.toggle('dark');
         }
