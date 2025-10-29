@@ -1,0 +1,282 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Jogo do Galo do Galo do Galo</title>
+    <style>
+        :root {
+            --bg-color: #f4f4f9;
+            --text-color: #333;
+            --board-bg: #fff;
+            --cell-bg: #fff;
+            --cell-disabled: #eee;
+            --btn-bg: #333;
+            --btn-hover: #555;
+        }
+        body.dark {
+            --bg-color: #1e1e2f;
+            --text-color: #eee;
+            --board-bg: #2c2c3c;
+            --cell-bg: #3a3a4a;
+            --cell-disabled: #555;
+            --btn-bg: #555;
+            --btn-hover: #777;
+        }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            text-align: center;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        h1 {
+            margin-bottom: 10px;
+        }
+        .main-board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 20px auto;
+            max-width: 600px;
+            aspect-ratio: 1 / 1;
+        }
+        .mid-board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 5px;
+            border: 2px solid var(--text-color);
+            padding: 5px;
+            border-radius: 10px;
+            background-color: var(--board-bg);
+            transition: background-color 0.5s ease;
+            aspect-ratio: 1 / 1;
+        }
+        .mini-board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2px;
+            border: 1px solid #aaa;
+            border-radius: 6px;
+            padding: 2px;
+            transition: background-color 0.5s ease;
+            aspect-ratio: 1 / 1;
+        }
+        .cell {
+            width: 100%;
+            height: 100%;
+            font-size: 1.2em; display: flex; align-items: center; justify-content: center;
+            text-align: center;
+            line-height: normal;
+            cursor: pointer;
+            border: 1px solid #ccc;
+            user-select: none;
+            border-radius: 4px;
+            background-color: var(--cell-bg);
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .cell:active {
+            transform: scale(0.95);
+        }
+        .disabled {
+            pointer-events: none;
+            background-color: var(--cell-disabled);
+        }
+        .won-X {
+            background-color: #ffcccc !important;
+        }
+        .won-O {
+            background-color: #cce0ff !important;
+        }
+        .X {
+            color: red;
+            transition: color 0.3s ease;
+        }
+        .O {
+            color: blue;
+            transition: color 0.3s ease;
+        }
+        #status {
+            font-size: 18px;
+            margin: 10px;
+        }
+        .button-bar {
+            margin: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            background-color: var(--btn-bg);
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: var(--btn-hover);
+        }
+    </style>
+</head>
+<body>
+    <h1>Jogo do Galo do Galo do Galo</h1>
+    <div class="button-bar">
+        <button onclick="location.reload()">Restart Game</button>
+        <button onclick="toggleTheme()">Toggle Dark Mode</button>
+    </div>
+    <div id="mainBoard" class="main-board"></div>
+    <p id="status">Player X's turn</p>
+
+    <script>
+        function toggleTheme() {
+            document.body.classList.toggle('dark');
+        }
+
+        const mainBoard = document.getElementById('mainBoard');
+        let currentPlayer = 'X';
+        let nextMid = null;
+        let nextMini = null;
+        let firstMove = true;
+
+        const miniWinners = Array(9).fill(null).map(() => Array(9).fill(null));
+        const midWinners = Array(9).fill(null);
+
+        function createCell(midIndex, miniIndex, cellIndex) {
+            const cell = document.createElement('div');
+            cell.className = 'cell';
+            cell.dataset.mid = midIndex;
+            cell.dataset.mini = miniIndex;
+            cell.dataset.cell = cellIndex;
+            return cell;
+        }
+
+        function createMiniBoard(midIndex, miniIndex) {
+            const mini = document.createElement('div');
+            mini.className = 'mini-board';
+            mini.dataset.mid = midIndex;
+            mini.dataset.mini = miniIndex;
+            for (let i = 0; i < 9; i++) {
+                const cell = createCell(midIndex, miniIndex, i);
+                mini.appendChild(cell);
+            }
+            return mini;
+        }
+
+        function createMidBoard(midIndex) {
+            const mid = document.createElement('div');
+            mid.className = 'mid-board';
+            mid.dataset.mid = midIndex;
+            for (let i = 0; i < 9; i++) {
+                const mini = createMiniBoard(midIndex, i);
+                mid.appendChild(mini);
+            }
+            return mid;
+        }
+
+        function initBoard() {
+            for (let i = 0; i < 9; i++) {
+                const mid = createMidBoard(i);
+                mainBoard.appendChild(mid);
+            }
+            updateBoardAccess();
+        }
+
+        function checkWin(cells) {
+            const lines = [
+                [0,1,2],[3,4,5],[6,7,8],
+                [0,3,6],[1,4,7],[2,5,8],
+                [0,4,8],[2,4,6]
+            ];
+            for (const [a,b,c] of lines) {
+                if (cells[a] && cells[a] === cells[b] && cells[a] === cells[c]) {
+                    return cells[a];
+                }
+            }
+            return null;
+        }
+
+        function handleMove(e) {
+            const cell = e.target;
+            if (cell.textContent !== '') return;
+            const mid = parseInt(cell.dataset.mid);
+            const mini = parseInt(cell.dataset.mini);
+            const cellIdx = parseInt(cell.dataset.cell);
+
+            if (midWinners[mid] || miniWinners[mid][mini]) return;
+
+            cell.textContent = currentPlayer;
+            cell.classList.add(currentPlayer);
+
+            const miniCells = Array.from(document.querySelectorAll(`.cell[data-mid='${mid}'][data-mini='${mini}']`));
+            const miniValues = miniCells.map(c => c.textContent);
+            const miniWinner = checkWin(miniValues);
+            if (miniWinner) {
+                miniWinners[mid][mini] = miniWinner;
+                miniCells.forEach(c => c.classList.add(`won-${miniWinner}`));
+            }
+
+            const midValues = miniWinners[mid];
+            const midWinner = checkWin(midValues);
+            if (midWinner) {
+                midWinners[mid] = midWinner;
+                document.querySelectorAll(`.cell[data-mid='${mid}']`).forEach(c => c.classList.add(`won-${midWinner}`));
+            }
+
+            const mainWinner = checkWin(midWinners);
+            if (mainWinner) {
+                document.getElementById('status').textContent = `Player ${mainWinner} wins the game!`;
+                document.querySelectorAll('.cell').forEach(cell => cell.classList.add('disabled'));
+                return;
+            }
+
+            nextMid = mini;
+            nextMini = cellIdx;
+
+            if (midWinners[nextMid] || miniWinners[nextMid][nextMini]) {
+                nextMid = null;
+                nextMini = null;
+            }
+
+            firstMove = false;
+            currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+            document.getElementById('status').textContent = `Player ${currentPlayer}'s turn`;
+            updateBoardAccess();
+        }
+
+        function updateBoardAccess() {
+            document.querySelectorAll('.cell').forEach(cell => {
+                cell.classList.add('disabled');
+                cell.removeEventListener('click', handleMove);
+            });
+
+            if (firstMove || nextMid === null || nextMini === null) {
+                document.querySelectorAll('.cell').forEach(cell => {
+                    const mid = parseInt(cell.dataset.mid);
+                    const mini = parseInt(cell.dataset.mini);
+                    if (cell.textContent === '' && !midWinners[mid] && !miniWinners[mid][mini]) {
+                        cell.classList.remove('disabled');
+                        cell.addEventListener('click', handleMove);
+                    }
+                });
+            } else {
+                document.querySelectorAll(`.cell[data-mid='${nextMid}'][data-mini='${nextMini}']`).forEach(cell => {
+                    const mid = parseInt(cell.dataset.mid);
+                    const mini = parseInt(cell.dataset.mini);
+                    if (cell.textContent === '' && !midWinners[mid] && !miniWinners[mid][mini]) {
+                        cell.classList.remove('disabled');
+                        cell.addEventListener('click', handleMove);
+                    }
+                });
+            }
+        }
+
+        initBoard();
+    </script>
+</body>
+</html>
