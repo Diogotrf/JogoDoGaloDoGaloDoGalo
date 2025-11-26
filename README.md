@@ -1,16 +1,40 @@
-# Tic Tac Toe³
+# Game Collection Website
 
-This is a **Tic Tac Toe** game with **three levels of depth**:
-- A 3×3 board
-- Each cell of it is a 3×3 board
-- Each cell of those is another 3×3 board
+A web-based collection of interactive games.
 
-Totaling **729 cells**!
+## Description
 
-## How to play
-- The first move is free.
-- The cell where you play defines the next mini board.
-- The mini board where you played defines the next medium board.
-- If you are sent to a cell already occupied, you can play anywhere.
-- If you are sent to a board that already has a winner, you can also play anywhere you want.
-- You win by aligning 3 won medium boards.
+This project is a website featuring multiple games that can be played directly in the browser.
+
+## Features
+
+- Multiple game options
+- Browser-based gameplay
+- User-friendly interface
+
+## Installation
+
+1. Clone the repository
+```bash
+git clone <repository-url>
+```
+
+2. Open `index.html` in your browser
+
+## Usage
+
+Simply open the website and select a game to play.
+
+## Technologies Used
+
+- HTML
+- CSS
+- JavaScript
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+[Specify your license here]
