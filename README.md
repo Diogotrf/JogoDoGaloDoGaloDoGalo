@@ -1,15 +1,16 @@
-# Jogo do Galo do Galo do Galo
+# Tic Tac Toe³
 
-Este é um jogo de **Jogo do Galo** (Tic Tac Toe) com **três níveis de profundidade**:
-- Um tabuleiro 3×3
-- Cada célula é um tabuleiro 3×3
-- Cada célula desses é outro tabuleiro 3×3
+This is a **Tic Tac Toe** game with **three levels of depth**:
+- A 3×3 board
+- Each cell of it is a 3×3 board
+- Each cell of those is another 3×3 board
 
-Totalizando **729 células**!
+Totaling **729 cells**!
 
-## Como jogar
-- A primeira jogada é livre.
-- A célula onde jogas define o próximo mini tabuleiro.
-- O mini tabuleiro onde jogaste define o próximo tabuleiro médio.
-- Se fores enviado para um tabuleiro já vencido, podes jogar em qualquer lugar.
-- Ganha quem alinhar 3 tabuleiros médios vencidos.
+## How to play
+- The first move is free.
+- The cell where you play defines the next mini board.
+- The mini board where you played defines the next medium board.
+- If you are sent to a cell already occupied, you can play anywhere.
+- If you are sent to a board that already has a winner, you can also play anywhere you want.
+- You win by aligning 3 won medium boards.
